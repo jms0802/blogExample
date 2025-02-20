@@ -1,2 +1,3 @@
-# blogExample
-ExpressJS를 이용한 블로그 예제
+# 블로그
+- ExpressJS + mongoDB
+- 인프런 Do it! Node.js 프로그래밍 입문
