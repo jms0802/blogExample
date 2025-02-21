@@ -104,6 +104,27 @@ router.get("/logout", (req, res) => {
  * 게시물 추가
  * GET /add
  */
+router.get("/add", checkLogin, asyncHandler(async (req, res) => {
+    const locals = {
+        title: "게시물 작성"
+    }
+    res.render("admin/add", { locals, layout: adminLayout1 });
+}));
+
+/**
+ * 게시물 추가
+ * POST /add
+ */
+router.post("/add", asyncHandler(async (req, res) => {
+    const { title, body } = req.body;
+    const newPost = new Post({
+        title: title,
+        body: body,
+    });
+    console.log(req.body);
+    await Post.create(newPost);
+    res.redirect("/allPosts");
+}));
 
 
 module.exports = router;
