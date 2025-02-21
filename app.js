@@ -4,6 +4,7 @@ const expressLayouts = require("express-ejs-layouts");
 const connectDb = require("./config/db");
 const cookieParser = require("cookie-parser");
 const methodOverride = require("method-override");
+const webSocket  = require("./middleware/chatSocket");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -25,6 +26,8 @@ app.use(methodOverride("_method"));
 app.use("/", require("./routes/main"));
 app.use("/", require("./routes/admin"));
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
     console.log(`App Listening on port ${port}`);
-})
+});
+
+webSocket(server);

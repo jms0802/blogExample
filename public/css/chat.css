@@ -1,0 +1,47 @@
+#messages {
+    list-style-type: none;
+    margin: 0;
+    padding: 10px;
+    overflow-y: auto;
+    flex-grow: 1;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    height: 80vh;
+}
+
+#messages li {
+    padding: 8px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    background-color: #e1f5fe; /* 메시지 배경색 */
+}
+
+form {
+    display: flex;
+    padding: 10px;
+    background-color: #fff;
+    border-top: 1px solid #ccc;
+}
+
+input {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff; /* 버튼 배경색 */
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3; /* 버튼 호버 색상 */
+}

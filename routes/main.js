@@ -6,17 +6,18 @@ const asyncHandler = require("express-async-handler");
 
 router.get(["/", "/home"], asyncHandler(async (req, res) => {
     const locals = {
-        title: "Home"
+        title: "메인 페이지"
     }
     const data = await Post.find();
     res.render("index", { locals, data, layout: mainLayout });
 }));
 
-router.get("/about", (req, res) => {
+router.get("/chat", (req, res) => {
     const locals = {
-        title: "About"
+        title: "실시간 채팅",
+        stylesheet:"chat.css"
     }
-    res.render("about", { locals, layout: mainLayout });
+    res.render("chat", { locals, layout: mainLayout });
 });
 
 /**
