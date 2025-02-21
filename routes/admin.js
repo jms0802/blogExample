@@ -126,5 +126,37 @@ router.post("/add", asyncHandler(async (req, res) => {
     res.redirect("/allPosts");
 }));
 
+/**
+ * 게시물 수정
+ * GET /edit/:id
+ */
+router.get("/edit/:id", checkLogin, asyncHandler(async (req, res) => {
+    const locals = { title: "게시물 편집" };
+    const data = await Post.findOne({ _id: req.params.id });
+    res.render("admin/edit", { locals, data, layout: adminLayout1 });
+}));
+
+/**
+ * 게시물 수정
+ * PUT /edit/:id
+ */
+router.put("/edit/:id", checkLogin, asyncHandler(async (req, res) => {
+    await Post.findByIdAndUpdate(req.params.id, {
+        title: req.body.title,
+        body: req.body.body,
+        createAt: Date.now()
+    })
+    console.log(req.body);
+    res.redirect("/allPosts");
+}));
+
+/**
+ * 게시물 삭제
+ * DELETE /delete/:id
+ */
+router.delete("/delete/:id", checkLogin, asyncHandler(async (req, res) => {
+    await Post.deleteOne({ _id: req.params.id });
+    res.redirect("/allPosts");
+}));
 
 module.exports = router;
