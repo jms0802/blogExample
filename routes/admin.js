@@ -9,6 +9,25 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const jwtSecret = process.env.JWT_SECRET;
 
+
+/**
+ * 로그인 확인
+ */
+const checkLogin = (req, res, next) => {
+    const token = req.cookies.token;
+    if (!token) {
+        res.redirect("/admin");
+    } else {
+        try {
+            const decoded = jwt.verify(token, jwtSecret);
+            req.userId = decoded.userId;
+            next();
+        } catch (err) {
+            res.redirect("admin");
+        }
+    }
+}
+
 /**
  * 관리자 페이지
  * GET /admin
@@ -64,12 +83,12 @@ router.post("/register", asyncHandler(async (req, res) => {
  * 모든 게시물
  * GET /allPosts
  */
-router.get("/allPosts", asyncHandler(async (req, res) => {
+router.get("/allPosts", checkLogin, asyncHandler(async (req, res) => {
     const locals = {
-        title : "Posts"
+        title: "Posts"
     }
     const data = await Post.find();
-    res.render("admin/allPost", { locals, data, layout:adminLayout1});
+    res.render("admin/allPost", { locals, data, layout: adminLayout1 });
 }));
 
 /**
