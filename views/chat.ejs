@@ -1,10 +1,14 @@
-<ul id="messages"></ul>
-<form id="form" action="">
-    <input id="input" autocomplete="off" /><button>Send</button>
-</form>
+<div id="chat-box">
+    <div id="messages"></div>
+    <form id="form" action="">
+        <input id="input" autocomplete="off" /><button>Send</button>
+    </form>
+</div>
+
 <script src="/socket.io/socket.io.js"></script>
 <script>
     var socket = io();
+    var username = makeRandomName();
 
     var messages = document.getElementById("messages");
     var form = document.getElementById("form");
@@ -13,44 +17,54 @@
     form.addEventListener("submit", function (e) {
         e.preventDefault();
         if (input.value) {
-            socket.emit("chat message", input.value);
+            console.log(username);
+            socket.emit("chat message", { msg: input.value, user: username });
             input.value = "";
         }
     });
 
     socket.emit("login", {
-        name: makeRandomName()
+        name: username
     });
 
     socket.on("login", function (data) {
-        var userItem = document.createElement("li");
+        var userItem = document.createElement("div");
         userItem.textContent = data;
-        userItem.style.backgroundColor = "#ccffcc"; // 초록 계열 배경색
+        userItem.className = "msg-in msg-status";
         messages.appendChild(userItem);
         messages.scrollTop = messages.scrollHeight;
     });
 
-    socket.on("chat history", function (history, username) {
+    socket.on("login-success", function(user){
+        username = user;
+        console.log(username);
+    })
+
+    socket.on("chat history", function (history) {
         history.forEach(msg => {
-            var item = document.createElement("li");
+            let item = document.createElement("div");
+            let owner = msg.user == username ? "msg-sent" : "msg-receive";
             item.textContent = msg;
+            item.className = "msg " + owner;
             messages.appendChild(item);
         });
         messages.scrollTop = messages.scrollHeight;
     });
 
-    socket.on("chat message", function (msg) {
-        var item = document.createElement("li");
-        console.log(msg);
-        item.textContent = msg;
+    socket.on("chat message", function (data) {
+        console.log(data);
+        var item = document.createElement("div");
+        let owner = data.user == username ? "msg-sent" : "msg-receive";
+        item.textContent = data.msg;
+        item.className = "msg " + owner;
         messages.appendChild(item);
         messages.scrollTop = messages.scrollHeight;
     });
 
     socket.on("disconnectUser", function (data) {
-        var userItem = document.createElement("li");
+        var userItem = document.createElement("div");
         userItem.textContent = data;
-        userItem.style.backgroundColor = "#ffcccc"; // 빨강계열 배경색
+        userItem.className = "msg-out msg-status";
         messages.appendChild(userItem);
         messages.scrollTop = messages.scrollHeight;
     });

@@ -1,28 +1,64 @@
+#chat-box {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
 #messages {
+    display: flex;
+    flex-direction: column;
+    gap:7px;
     list-style-type: none;
     margin: 0;
     padding: 10px;
     overflow-y: auto;
     flex-grow: 1;
     background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     height: 80vh;
 }
 
-#messages li {
+.msg {
+    max-width: 70%;
+    width: fit-content;
     padding: 8px;
-    margin-bottom: 5px;
     border-radius: 5px;
     background-color: #e1f5fe; /* 메시지 배경색 */
+    word-wrap: break-word;
+}
+
+.msg-sent {
+    align-self: flex-end;
+    background-color: #dcf8c6;
+    color: #333;
+    text-align: right;
+}
+
+.msg-receive {
+    align-self: flex-start;
+    color: #333;
+    text-align: left;
+}
+
+.msg-status {
+    width: fit-content;
+    padding: 8px;
+    border-radius: 5px;
+    margin: 0 auto;
+    font-size: 0.8rem;
+}
+
+.msg-in {
+    background-color: #ccffcc;
+}
+
+.msg-out {
+    background-color: #ffcccc;
 }
 
 form {
     display: flex;
     padding: 10px;
     background-color: #fff;
-    border-top: 1px solid #ccc;
 }
 
 input {
