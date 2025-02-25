@@ -1,5 +1,6 @@
 const SocketIO = require("socket.io");
 const MAX_CONNECT = 10;
+const MAX_MESSAGE = 1000;
 let messages = [];
 let connectUser = [];
 
@@ -35,6 +36,9 @@ module.exports = (server) => {
         socket.on("chat message", (data) => {
             const msg = data.msg;
             const user = data.user;
+            if(messages.length >= MAX_MESSAGE){
+                messages.shift();
+            }
             messages.push({msg, user});
             io.emit("chat message", { msg: msg, user: user });
         });
