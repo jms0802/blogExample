@@ -35,7 +35,7 @@ module.exports = (server) => {
         socket.on("chat message", (data) => {
             const msg = data.msg;
             const user = data.user;
-            messages.push(msg);
+            messages.push({msg, user});
             io.emit("chat message", { msg: msg, user: user });
         });
 

@@ -41,28 +41,17 @@
 
     socket.on("login-success", function(user){
         username = user;
-        console.log(username);
     })
 
     socket.on("chat history", function (history) {
-        history.forEach(msg => {
-            let item = document.createElement("div");
-            let owner = msg.user == username ? "msg-sent" : "msg-receive";
-            item.textContent = msg;
-            item.className = "msg " + owner;
-            messages.appendChild(item);
+        history.forEach(data => {
+            makeMsg(data.msg, data.user);
         });
         messages.scrollTop = messages.scrollHeight;
     });
 
     socket.on("chat message", function (data) {
-        console.log(data);
-        var item = document.createElement("div");
-        let owner = data.user == username ? "msg-sent" : "msg-receive";
-        item.textContent = data.msg;
-        item.className = "msg " + owner;
-        messages.appendChild(item);
-        messages.scrollTop = messages.scrollHeight;
+        makeMsg(data.msg, data.user);
     });
 
     socket.on("disconnectUser", function (data) {
@@ -75,5 +64,26 @@
 
     function makeRandomName() {
         return "User" + Math.floor(Math.random() * 100);;
+    }
+
+    function makeMsg(message, name) {
+        //메시지 컨테이너
+        let msg_container = document.createElement("div");
+        let owner = name == username ? "msg-sent" : "msg-receive";
+        msg_container.className = "msg-container " + owner;
+
+        //보낸 사람
+        let spanElement = document.createElement("span");
+        spanElement.textContent = name;
+        msg_container.appendChild(spanElement);
+
+        //메시지 내용
+        let item = document.createElement("div");
+        item.textContent = message;
+        item.className = "msg";
+        msg_container.appendChild(item);
+
+        messages.appendChild(msg_container);
+        messages.scrollTop = messages.scrollHeight;
     }
 </script>

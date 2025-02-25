@@ -15,10 +15,15 @@
     flex-grow: 1;
     background-color: #fff;
     height: 80vh;
+    overflow-x: hidden;
+}
+
+.msg-container {
+    max-width: 70%;
 }
 
 .msg {
-    max-width: 70%;
+    max-width: 100%;
     width: fit-content;
     padding: 8px;
     border-radius: 5px;
@@ -28,9 +33,12 @@
 
 .msg-sent {
     align-self: flex-end;
-    background-color: #dcf8c6;
     color: #333;
     text-align: right;
+}
+
+.msg-sent > .msg {
+    background-color: #dcf8c6;
 }
 
 .msg-receive {
