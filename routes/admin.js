@@ -87,7 +87,7 @@ router.get("/allPosts", checkLogin, asyncHandler(async (req, res) => {
     const locals = {
         title: "Posts"
     }
-    const data = await Post.find();
+    const data = await Post.find().sort({ createAt: -1 });
     res.render("admin/allPost", { locals, data, layout: adminLayout1 });
 }));
 

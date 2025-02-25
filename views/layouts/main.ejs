@@ -6,7 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= locals.title %></title>
   <meta name="description" content="My first application using Node.js, Express and MongoDB">
-  <link rel="stylesheet" href="/css/style.css">
+  <% if(locals.stylesheet) { %>
+    <link rel="stylesheet" href="/css/<%= locals.stylesheet %>">
+    <% } %>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
   
@@ -15,7 +18,7 @@
     <!-- 헤더 : 로고, 상단 메뉴, 로그인 -->
     <header class="header">
       <!-- 로고 -->
-      <a href="/" class="header-logo">오후의 블로그</a>
+      <a href="/" class="header-logo">상상나래</a>
 
       <!-- 상단 메뉴 -->
       <nav class="header-nav">
@@ -24,7 +27,7 @@
             <a href="/home">Home</a>
           </li>
           <li>
-            <a href="/about">About</a>
+            <a href="/chat">Chat</a>
           </li>
         </ul>
       </nav>
