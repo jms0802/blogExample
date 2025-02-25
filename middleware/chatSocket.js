@@ -1,11 +1,17 @@
 const SocketIO = require("socket.io");
+const MAX_CONNECT = 10;
 let messages = [];
 let connectUser = [];
+
 
 module.exports = (server) => {
     const io = SocketIO(server, { path: "/socket.io" });
     io.on("connection", (socket) => {
-
+        if(connectUser.length >= MAX_CONNECT){
+            socket.emit("redirect", "/");
+            socket.disconnect();
+            return;
+        }
         //접속 유저명 표시
         socket.on("login", function (data) {
             let username = data.name;
@@ -39,7 +45,7 @@ module.exports = (server) => {
         //사용자 연결 해제
         socket.on("disconnect", () => {
             console.log(`${socket.name} 연결 해제`);
-            //connectUser.pop(username);
+            connectUser.pop(socket.name);
             io.emit("disconnectUser", socket.name + " 님이 퇴장하였습니다.");
         });
     });
