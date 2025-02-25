@@ -8,7 +8,7 @@ router.get(["/", "/home"], asyncHandler(async (req, res) => {
     const locals = {
         title: "메인 페이지"
     }
-    const data = await Post.find();
+    const data = await Post.find().sort({ createAt: -1 });
     res.render("index", { locals, data, layout: mainLayout });
 }));
 
