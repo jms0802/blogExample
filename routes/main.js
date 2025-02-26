@@ -17,7 +17,7 @@ router.get("/chat", (req, res) => {
         title: "실시간 채팅",
         stylesheet:"chat.css"
     }
-    res.render("chat", { locals, layout: mainLayout });
+    res.render("chat", { locals, layout:false });
 });
 
 /**

@@ -1,20 +1,40 @@
+#chat-container {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    width: 350px;
+    height: 500px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+#chat-frame {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
 #chat-box {
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    height: 100%;
 }
 
 #messages {
     display: flex;
     flex-direction: column;
-    gap:7px;
+    gap: 7px;
     list-style-type: none;
     margin: 0;
     padding: 10px;
     overflow-y: auto;
     flex-grow: 1;
-    background-color: #fff;
-    height: 80vh;
+    height: 85%;
     overflow-x: hidden;
 }
 
@@ -27,7 +47,8 @@
     width: fit-content;
     padding: 8px;
     border-radius: 5px;
-    background-color: #e1f5fe; /* 메시지 배경색 */
+    background-color: #e1f5fe;
+    /* 메시지 배경색 */
     word-wrap: break-word;
 }
 
@@ -37,7 +58,7 @@
     text-align: right;
 }
 
-.msg-sent > .msg {
+.msg-sent>.msg {
     background-color: #dcf8c6;
 }
 
@@ -66,7 +87,6 @@
 form {
     display: flex;
     padding: 10px;
-    background-color: #fff;
 }
 
 input {
@@ -81,11 +101,13 @@ button {
     padding: 10px 15px;
     border: none;
     border-radius: 5px;
-    background-color: #007bff; /* 버튼 배경색 */
+    background-color: #007bff;
+    /* 버튼 배경색 */
     color: white;
     cursor: pointer;
 }
 
 button:hover {
-    background-color: #0056b3; /* 버튼 호버 색상 */
+    background-color: #0056b3;
+    /* 버튼 호버 색상 */
 }
