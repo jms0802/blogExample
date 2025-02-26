@@ -1,3 +1,25 @@
+<div id="info">
+    <div id="user-name">
+        <svg class="user-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M12 12C14.21 12 16 10.21 16 8C16 5.79 14.21 4 12 4C9.79 4 8 5.79 8 8C8 10.21 9.79 12 12 12ZM12 14C9.33 14 4 15.34 4 18V20H20V18C20 15.34 14.67 14 12 14Z" />
+        </svg>
+        <span id="user_name"></span>
+    </div>
+    <div class="active-users-container">
+        <div id="user-count">
+            <div class="online-indicator"></div>
+            <span id="online-users"></span>
+        </div>
+        <div class="users-popup" id="users-popup">
+            <div class="users-popup-header">
+                접속자 목록
+            </div>
+            <div class="users-list" id="users-list"></div>
+            <div class="user-popup-close" id="close-popup">닫기</div>
+        </div>
+    </div>
+</div>
 <div id="chat-box">
     <div id="messages"></div>
     <form id="form" action="">
@@ -13,17 +35,13 @@
     var messages = document.getElementById("messages");
     var form = document.getElementById("form");
     var input = document.getElementById("input");
+    var nameDiv = document.getElementById("user_name");
+    var countDiv = document.getElementById("online-users");
 
     form.addEventListener("submit", function (e) {
         e.preventDefault();
         if (input.value) {
-            const date = new Date();
-            const time = date.toLocaleTimeString("ko-KR", {
-                hour: "2-digit",
-                minute: "2-digit",
-                hour12: false // 24시간 형식
-            });
-            socket.emit("chat message", { msg: input.value, user: username, createDate: time });
+            socket.emit("chat message", { msg: input.value, user: username, createDate: getTimeNow() });
             console.log(time);
             input.value = "";
         }
@@ -35,24 +53,35 @@
     });
 
     socket.emit("login", {
-        name: username
+        name: username,
+        connectionTime: getTimeNow(),
     });
 
     socket.on("login-msg", function (data) {
         var userItem = document.createElement("div");
-        userItem.textContent = data;
+        userItem.textContent = data.msg;
         userItem.className = "msg-in msg-status";
         messages.appendChild(userItem);
         messages.scrollTop = messages.scrollHeight;
+
+        countDiv.textContent = data.count + " / " + data.maxcount;
+        createUserItem(data.user.username, data.user.connectionTime);
     });
 
-    socket.on("login-success", function (user) {
-        username = user;
+    socket.on("login-success", function (data) {
+        username = data.username;
+
+        nameDiv.textContent = username;
     })
 
-    socket.on("chat history", function (history) {
-        history.forEach(data => {
+    socket.on("chat history", function (data) {
+        data.messages.forEach(data => {
             makeMsg(data.msg, data.user, data.createDate);
+        });
+        data.users.forEach((user, index) => {
+            if (index < data.users.length) {
+                createUserItem(user.username, user.connectionTime);
+            }
         });
         messages.scrollTop = messages.scrollHeight;
     });
@@ -63,10 +92,13 @@
 
     socket.on("disconnectUser", function (data) {
         var userItem = document.createElement("div");
-        userItem.textContent = data;
+        userItem.textContent = data.msg;
         userItem.className = "msg-out msg-status";
         messages.appendChild(userItem);
         messages.scrollTop = messages.scrollHeight;
+
+        countDiv.textContent = data.count + " / " + data.maxcount;
+        deleteUserItem(data.user.username);
     });
 
     function makeRandomName() {
@@ -92,5 +124,67 @@
 
         messages.appendChild(msg_container);
         messages.scrollTop = messages.scrollHeight;
+    }
+
+    function getTimeNow() {
+        const date = new Date();
+        const time = date.toLocaleTimeString("ko-KR", {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false // 24시간 형식
+        });
+        return time;
+    }
+</script>
+<script>
+    // 접속자 목록 팝업 토글 기능
+    const activeUsersBtn = document.getElementById('user-count');
+    const usersPopup = document.getElementById('users-popup');
+    const closePopup = document.getElementById('close-popup');
+
+    setEvent();
+
+    function setEvent() {
+        activeUsersBtn.addEventListener('click', function () {
+            usersPopup.classList.toggle('active');
+        });
+
+        closePopup.addEventListener('click', function () {
+            usersPopup.classList.remove('active');
+        });
+
+        // 팝업 외부 클릭 시 닫기
+        document.addEventListener('click', function (event) {
+            if (!activeUsersBtn.contains(event.target) &&
+                !usersPopup.contains(event.target)) {
+                usersPopup.classList.remove('active');
+            }
+        });
+    }
+
+    // 사용자 항목 추가
+    function createUserItem(username, date) {
+        const userItemHTML = `
+                <div class="user-item">
+                    <div class="online-indicator"></div>
+                    <div>
+                        <div class="user-item-name">${username}</div>
+                        <div class="user-status">접속중 - ${date}</div>
+                    </div>
+                </div>
+            `;
+        document.getElementById("users-list").insertAdjacentHTML('beforeend', userItemHTML);
+    }
+
+    // 사용자 항목 삭제
+    function deleteUserItem(username) {
+        const userItems = document.querySelectorAll(".user-item");
+
+        userItems.forEach(item => {
+            const userNameDiv = item.querySelector(".user-item-name");
+            if (userNameDiv && userNameDiv.textContent === username) {
+                item.remove();
+            }
+        });
     }
 </script>

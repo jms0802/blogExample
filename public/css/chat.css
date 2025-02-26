@@ -1,3 +1,58 @@
+#info {
+    display: flex;
+    justify-content: space-evenly;
+    margin-bottom: 1%;
+}
+
+#user-name {
+    background-color: #4a89dc;
+    color: white;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+}
+
+#user-name:hover {
+    background-color: #3a79cc;
+}
+
+.user-icon {
+    width: 16px;
+    height: 16px;
+    fill: white;
+}
+
+#user-count {
+    background-color: #f1f3f5;
+    border: 1px solid #dee2e6;
+    color: #495057;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+#user-count:hover {
+    background-color: #e9ecef;
+}
+
+.online-indicator {
+    width: 8px;
+    height: 8px;
+    background-color: #40c057;
+    border-radius: 50%;
+    margin-right: 4px;
+}
+
 #chat-box {
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -7,14 +62,14 @@
 #messages {
     display: flex;
     flex-direction: column;
-    gap:7px;
+    gap: 7px;
     list-style-type: none;
     margin: 0;
     padding: 10px;
     overflow-y: auto;
     flex-grow: 1;
     background-color: #fff;
-    height: 80vh;
+    height: 70vh;
     overflow-x: hidden;
 }
 
@@ -27,7 +82,8 @@
     width: fit-content;
     padding: 8px;
     border-radius: 5px;
-    background-color: #e1f5fe; /* 메시지 배경색 */
+    background-color: #e1f5fe;
+    /* 메시지 배경색 */
     word-wrap: break-word;
 }
 
@@ -37,7 +93,7 @@
     text-align: right;
 }
 
-.msg-sent > .msg {
+.msg-sent>.msg {
     background-color: #dcf8c6;
 }
 
@@ -81,11 +137,93 @@ button {
     padding: 10px 15px;
     border: none;
     border-radius: 5px;
-    background-color: #007bff; /* 버튼 배경색 */
+    background-color: #007bff;
+    /* 버튼 배경색 */
     color: white;
     cursor: pointer;
 }
 
 button:hover {
-    background-color: #0056b3; /* 버튼 호버 색상 */
+    background-color: #0056b3;
+    /* 버튼 호버 색상 */
+}
+
+.users-popup {
+    position: absolute;
+    left: -40%;
+    width: 150px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 200;
+    overflow: hidden;
+    display: none;
+    /* 기본적으로 숨김 처리 */
+    margin-top: 8px;
+}
+
+.users-popup.active {
+    display: block;
+    /* JavaScript로 active 클래스 토글 */
+}
+
+.users-popup-header {
+    padding: 12px 16px;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.users-list {
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+.user-item {
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background-color 0.2s ease;
+    border-bottom: 1px solid #f1f3f5;
+}
+
+.user-item:last-child {
+    border-bottom: none;
+}
+
+.user-item:hover {
+    background-color: #f8f9fa;
+}
+
+.user-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+}
+
+.user-item-name {
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.user-popup-close {
+    text-align: center;
+    padding: 8px 0;
+    background-color: #f8f9fa;
+    cursor: pointer;
+    font-size: 13px;
+    color: #868e96;
+    border-top: 1px solid #e9ecef;
+}
+
+.user-popup-close:hover {
+    background-color: #e9ecef;
+    color: #495057;
+}
+
+.active-users-container {
+    position: relative;
 }
