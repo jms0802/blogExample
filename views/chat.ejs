@@ -17,7 +17,14 @@
     form.addEventListener("submit", function (e) {
         e.preventDefault();
         if (input.value) {
-            socket.emit("chat message", { msg: input.value, user: username });
+            const date = new Date();
+            const time = date.toLocaleTimeString("ko-KR", {
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: false // 24시간 형식
+            });
+            socket.emit("chat message", { msg: input.value, user: username, createDate: time });
+            console.log(time);
             input.value = "";
         }
     });
@@ -31,7 +38,7 @@
         name: username
     });
 
-    socket.on("login", function (data) {
+    socket.on("login-msg", function (data) {
         var userItem = document.createElement("div");
         userItem.textContent = data;
         userItem.className = "msg-in msg-status";
@@ -39,19 +46,19 @@
         messages.scrollTop = messages.scrollHeight;
     });
 
-    socket.on("login-success", function(user){
+    socket.on("login-success", function (user) {
         username = user;
     })
 
     socket.on("chat history", function (history) {
         history.forEach(data => {
-            makeMsg(data.msg, data.user);
+            makeMsg(data.msg, data.user, data.createDate);
         });
         messages.scrollTop = messages.scrollHeight;
     });
 
     socket.on("chat message", function (data) {
-        makeMsg(data.msg, data.user);
+        makeMsg(data.msg, data.user, data.createDate);
     });
 
     socket.on("disconnectUser", function (data) {
@@ -66,7 +73,7 @@
         return "User" + Math.floor(Math.random() * 100);;
     }
 
-    function makeMsg(message, name) {
+    function makeMsg(message, name, date) {
         //메시지 컨테이너
         let msg_container = document.createElement("div");
         let owner = name == username ? "msg-sent" : "msg-receive";
@@ -74,7 +81,7 @@
 
         //보낸 사람
         let spanElement = document.createElement("span");
-        spanElement.textContent = name;
+        spanElement.textContent = name + " | " + date;
         msg_container.appendChild(spanElement);
 
         //메시지 내용

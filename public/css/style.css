@@ -68,10 +68,6 @@ img {
   padding: 0 10px;
 }
 
-.main {
-  padding: 20px 0;
-}
-
 /* 히어로 이미지 표시 부분 */
 .hero-image {
   max-height: 400px;

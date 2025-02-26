@@ -23,7 +23,7 @@ module.exports = (server) => {
 
             connectUser.push(username);
             socket.name = username;
-            io.emit("login", username + " 님이 입장하였습니다.");
+            io.emit("login-msg", username + " 님이 입장하였습니다.");
             socket.emit("login-success", username);
             console.log(`${username} 연결됨`);
         });
@@ -36,11 +36,13 @@ module.exports = (server) => {
         socket.on("chat message", (data) => {
             const msg = data.msg;
             const user = data.user;
+            const date = data.createDate;
             if(messages.length >= MAX_MESSAGE){
                 messages.shift();
             }
-            messages.push({msg, user});
-            io.emit("chat message", { msg: msg, user: user });
+            messages.push({msg, user, createDate:date});
+            console.log(messages);
+            io.emit("chat message", { msg: msg, user: user, createDate:date });
         });
 
         socket.on('forceDisconnect', function () {
