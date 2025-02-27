@@ -1,10 +1,22 @@
 <div id="info">
-    <div id="user-name">
-        <svg class="user-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path
-                d="M12 12C14.21 12 16 10.21 16 8C16 5.79 14.21 4 12 4C9.79 4 8 5.79 8 8C8 10.21 9.79 12 12 12ZM12 14C9.33 14 4 15.34 4 18V20H20V18C20 15.34 14.67 14 12 14Z" />
-        </svg>
-        <span id="user_name"></span>
+    <div class="edit-user-container">
+        <div id="user-name">
+            <svg class="user-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M12 12C14.21 12 16 10.21 16 8C16 5.79 14.21 4 12 4C9.79 4 8 5.79 8 8C8 10.21 9.79 12 12 12ZM12 14C9.33 14 4 15.34 4 18V20H20V18C20 15.34 14.67 14 12 14Z" />
+            </svg>
+            <span id="user_name"></span>
+        </div>
+        <div class="edit-popup" id="edit-popup">
+            <div class="edit-popup-header">
+                사용자 정보 수정
+            </div>
+            <div class="edit-popup-item">
+                <label for="edit-name">이름</label>
+                <input type="text" id="edit-name" />
+            </div>
+            <div class="user-popup-close" id="edit-name-confirm">적용</div>
+        </div>
     </div>
     <div class="active-users-container">
         <div id="user-count">
@@ -42,7 +54,6 @@
         e.preventDefault();
         if (input.value) {
             socket.emit("chat message", { msg: input.value, user: username, createDate: getTimeNow() });
-            console.log(time);
             input.value = "";
         }
     });
@@ -73,6 +84,24 @@
 
         nameDiv.textContent = username;
     })
+
+    socket.on("change-name-msg", function (data) {
+        changeUserName(data.prevName, data.newName);
+
+        var userItem = document.createElement("div");
+        userItem.textContent = data.msg;
+        userItem.className = "msg-status";
+        messages.appendChild(userItem);
+        messages.scrollTop = messages.scrollHeight;
+    });
+
+    socket.on("change-name-result", function (data) {
+        if (data.error != null) {
+            alert(data.error + ` "${data.newName}"`);
+        }
+        changeMyName(data.newName);
+        username = data.newName;
+    });
 
     socket.on("chat history", function (data) {
         data.messages.forEach(data => {
@@ -142,6 +171,11 @@
     const usersPopup = document.getElementById('users-popup');
     const closePopup = document.getElementById('close-popup');
 
+    // 사용자 정보 수정 팝업 토글 기능
+    const editUserBtn = document.getElementById('user-name');
+    const editPopup = document.getElementById('edit-popup');
+    const editNameConfirm = document.getElementById('edit-name-confirm');
+
     setEvent();
 
     function setEvent() {
@@ -158,6 +192,29 @@
             if (!activeUsersBtn.contains(event.target) &&
                 !usersPopup.contains(event.target)) {
                 usersPopup.classList.remove('active');
+            }
+            if (!editUserBtn.contains(event.target) &&
+                !editPopup.contains(event.target)) {
+                editPopup.classList.remove('active');
+            }
+        });
+
+        editUserBtn.addEventListener('click', function () {
+            editPopup.classList.toggle('active');
+        });
+
+        editNameConfirm.addEventListener('click', function () {
+            const editNameInput = document.getElementById('edit-name');
+            const newName = editNameInput.value;
+            if (newName) {
+                socket.emit('change name', { newName });
+                editPopup.classList.remove('active');
+            }
+        });
+
+        document.getElementById('edit-name').addEventListener('keydown', function (event) {
+            if (event.key === 'Enter') {
+                editNameConfirm.click();
             }
         });
     }
@@ -184,6 +241,22 @@
             const userNameDiv = item.querySelector(".user-item-name");
             if (userNameDiv && userNameDiv.textContent === username) {
                 item.remove();
+            }
+        });
+    }
+
+    function changeMyName(newName) {
+        const editUserBtn = document.getElementById('user_name');
+        editUserBtn.textContent = newName;
+    }
+
+    function changeUserName(prevName, newName) {
+        const userItems = document.querySelectorAll(".user-item");
+
+        userItems.forEach(item => {
+            const userNameDiv = item.querySelector(".user-item-name");
+            if (userNameDiv && userNameDiv.textContent === prevName) {
+                userNameDiv.textContent = newName;
             }
         });
     }

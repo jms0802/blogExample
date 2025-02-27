@@ -4,7 +4,6 @@ const MAX_MESSAGE = 1000;
 let messages = [];
 let connectUser = [];
 
-
 module.exports = (server) => {
     const io = SocketIO(server, { path: "/socket.io" });
     io.on("connection", (socket) => {
@@ -37,6 +36,33 @@ module.exports = (server) => {
             console.log(`${username} 연결됨`);
         });
 
+        //사용자 이름 변경
+        socket.on("change name", function (data) {
+            const prevName = socket.name;
+            const newName = data.newName;
+            if(connectUser.find(u => u.username === newName) !== undefined) {
+                socket.emit("change-name-result", { error: "Duflicate", newName: newName });
+                return;
+            }
+            const changeUser = connectUser.find(u => u.username === prevName);
+            let msg = "";
+            if (changeUser) {
+                let index = connectUser.indexOf(changeUser);
+                if (index !== -1) {
+                    connectUser[index].username = newName;
+                }
+                msg = prevName + " 님이 " + newName + " 으로 변경하였습니다.";
+                socket.name = newName;
+            } else {
+                msg = "undefined";
+            }
+            io.emit("change-name-msg", {
+                msg: msg,
+                prevName: prevName,
+                newName: newName,
+            });
+            socket.emit("change-name-result", { error: null, newName: newName });
+        });
 
         //이전 채팅 기록 표시
         socket.emit("chat history", { messages: messages, users: connectUser });
@@ -50,7 +76,6 @@ module.exports = (server) => {
                 messages.shift();
             }
             messages.push({ msg, user, createDate: date });
-            console.log(messages);
             io.emit("chat message", { msg: msg, user: user, createDate: date });
         });
 

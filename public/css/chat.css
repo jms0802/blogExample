@@ -75,6 +75,8 @@
 
 .msg-container {
     max-width: 70%;
+    display: flex;
+    flex-direction: column;
 }
 
 .msg {
@@ -95,6 +97,7 @@
 
 .msg-sent>.msg {
     background-color: #dcf8c6;
+    align-self: inherit;
 }
 
 .msg-receive {
@@ -148,7 +151,8 @@ button:hover {
     /* 버튼 호버 색상 */
 }
 
-.users-popup {
+.users-popup,
+.edit-popup {
     position: absolute;
     left: -40%;
     width: 150px;
@@ -162,7 +166,13 @@ button:hover {
     margin-top: 8px;
 }
 
-.users-popup.active {
+.edit-popup {
+    width: 200px;
+    left: -60%;
+}
+
+.users-popup.active,
+.edit-popup.active {
     display: block;
     /* JavaScript로 active 클래스 토글 */
 }
@@ -175,12 +185,22 @@ button:hover {
     font-size: 14px;
 }
 
+.edit-popup-header {
+    padding: 12px 16px;
+    background-color: #4a89dc;
+    border-bottom: 1px solid #e9ecef;
+    font-weight: 500;
+    font-size: 15px;
+    color: white;
+}
+
 .users-list {
     max-height: 250px;
     overflow-y: auto;
 }
 
-.user-item {
+.user-item,
+.edit-popup-item {
     padding: 10px 16px;
     display: flex;
     align-items: center;
@@ -224,6 +244,11 @@ button:hover {
     color: #495057;
 }
 
-.active-users-container {
+#edit-name {
+    margin: 0;
+}
+
+.active-users-container,
+.edit-user-container {
     position: relative;
 }
