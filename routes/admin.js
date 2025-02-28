@@ -159,4 +159,17 @@ router.delete("/delete/:id", checkLogin, asyncHandler(async (req, res) => {
     res.redirect("/allPosts");
 }));
 
+/**
+ * 관리자용 채팅 페이지
+ * GET /chat
+ */
+router.get("/chat/admin", checkLogin, (req, res) => {
+    const locals = {
+        title: "실시간 채팅",
+        stylesheet: "chat.css",
+        role: "admin",
+    }
+    res.render("chat", { locals, layout: adminLayout1 });
+});
+
 module.exports = router;

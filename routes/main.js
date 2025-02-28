@@ -15,7 +15,8 @@ router.get(["/", "/home"], asyncHandler(async (req, res) => {
 router.get("/chat", (req, res) => {
     const locals = {
         title: "실시간 채팅",
-        stylesheet:"chat.css"
+        stylesheet:"chat.css",
+        role: "user",
     }
     res.render("chat", { locals, layout: mainLayout });
 });

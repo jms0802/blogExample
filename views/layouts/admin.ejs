@@ -8,6 +8,9 @@
     <title><%- locals.title %></title>
     <meta name="description" content="My first application using Node.js, Express and MongoDB">
     <link rel="stylesheet" href="/css/style.css">
+    <% if(locals.stylesheet) { %>
+        <link rel="stylesheet" href="/css/<%= locals.stylesheet %>">
+        <% } %>
 </head>
 
 <body>
@@ -26,7 +29,7 @@
                         <a href="/home">Home</a>
                     </li>
                     <li>
-                        <a href="/chat">Chat</a>
+                        <a href="/chat/admin">Chat</a>
                     </li>
                 </ul>
             </nav>

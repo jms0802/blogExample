@@ -17,10 +17,13 @@ module.exports = (server) => {
             let username = data.name;
             let time = data.connectionTime;
 
-            while (connectUser.includes(username)) {
-                username = "User" + Math.floor(Math.random() * 100);
+            if(data.role === "admin") {
+                username = "Admin";
+            } else {
+                while (connectUser.includes(username)) {
+                    username = "User" + Math.floor(Math.random() * 100);
+                }
             }
-
             connectUser.push({ username, connectionTime: time });
             socket.name = username;
 
