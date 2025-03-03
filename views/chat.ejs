@@ -45,7 +45,7 @@
     var role = "<%= locals.role %>";
     var username;
     if(role === "admin") {
-        username = "admin";
+        username = "Admin";
     } else {
         username = makeRandomName();
     }
@@ -60,7 +60,7 @@
     form.addEventListener("submit", function (e) {
         e.preventDefault();
         if (input.value) {
-            socket.emit("chat message", { msg: input.value, user: username, createDate: getTimeNow() });
+            socket.emit("chat message", { msg: input.value, user: username, createDate: getTimeNow(), role: role });
             input.value = "";
         }
     });
@@ -79,12 +79,13 @@
     socket.on("login-msg", function (data) {
         var userItem = document.createElement("div");
         userItem.textContent = data.msg;
-        userItem.className = "msg-in msg-status";
+        userItem.className = 
+            `${data.user.role === 'admin' ? 'msg-admin' : 'msg-in'} msg-status`;
         messages.appendChild(userItem);
         messages.scrollTop = messages.scrollHeight;
 
         countDiv.textContent = data.count + " / " + data.maxcount;
-        createUserItem(data.user.username, data.user.connectionTime);
+        createUserItem(data.user);
     });
 
     socket.on("login-success", function (data) {
@@ -113,18 +114,20 @@
 
     socket.on("chat history", function (data) {
         data.messages.forEach(data => {
-            makeMsg(data.msg, data.user, data.createDate);
+            makeMsg(data.msg, data.user);
         });
         data.users.forEach((user, index) => {
+
+            //가득 찼을 때 넘어가기
             if (index < data.users.length) {
-                createUserItem(user.username, user.connectionTime);
+                createUserItem(user);
             }
         });
         messages.scrollTop = messages.scrollHeight;
     });
 
     socket.on("chat message", function (data) {
-        makeMsg(data.msg, data.user, data.createDate);
+        makeMsg(data.msg, data.user);
     });
 
     socket.on("disconnectUser", function (data) {
@@ -142,21 +145,21 @@
         return "User" + Math.floor(Math.random() * 100);;
     }
 
-    function makeMsg(message, name, date) {
+    function makeMsg(msg, user) {
         //메시지 컨테이너
         let msg_container = document.createElement("div");
-        let owner = name == username ? "msg-sent" : "msg-receive";
+        let owner = user.name == username ? "msg-sent" : "msg-receive";
         msg_container.className = "msg-container " + owner;
 
         //보낸 사람
         let spanElement = document.createElement("span");
-        spanElement.textContent = name + " | " + date;
+        spanElement.textContent = user.name + " | " + msg.date;
         msg_container.appendChild(spanElement);
 
         //메시지 내용
         let item = document.createElement("div");
-        item.textContent = message;
-        item.className = "msg";
+        item.textContent = msg.value;
+        item.className = user.role == "admin" ? "msg msg-admin" : "msg";
         msg_container.appendChild(item);
 
         messages.appendChild(msg_container);
@@ -228,13 +231,14 @@
     }
 
     // 사용자 항목 추가
-    function createUserItem(username, date) {
+    function createUserItem(user) {
+        console.log(user);
         const userItemHTML = `
-                <div class="user-item">
+                <div class="user-item ${user.role === 'admin' ? 'msg-admin' : ''}">
                     <div class="online-indicator"></div>
                     <div>
-                        <div class="user-item-name">${username}</div>
-                        <div class="user-status">접속중 - ${date}</div>
+                        <div class="user-item-name">${user.username}</div>
+                        <div class="user-status">접속중 - ${user.connectionTime}</div>
                     </div>
                 </div>
             `;

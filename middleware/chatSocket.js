@@ -7,11 +7,13 @@ let connectUser = [];
 module.exports = (server) => {
     const io = SocketIO(server, { path: "/socket.io" });
     io.on("connection", (socket) => {
+        //인원 초과
         if (connectUser.length >= MAX_CONNECT) {
             socket.emit("redirect", "/");
             socket.disconnect();
             return;
         }
+
         //접속 유저명 표시
         socket.on("login", function (data) {
             let username = data.name;
@@ -24,7 +26,7 @@ module.exports = (server) => {
                     username = "User" + Math.floor(Math.random() * 100);
                 }
             }
-            connectUser.push({ username, connectionTime: time });
+            connectUser.push({ username, connectionTime: time, role: data.role });
             socket.name = username;
 
             const loginMsg = username + " 님이 입장하였습니다.";
@@ -33,9 +35,9 @@ module.exports = (server) => {
                     msg: loginMsg,
                     count: connectUser.length,
                     maxcount: MAX_CONNECT,
-                    user: connectUser[connectUser.length - 1]
+                    user: connectUser[connectUser.length - 1],
                 });
-            socket.emit("login-success", { username: username });
+            socket.emit("login-success", { username: username, role: data.role, });
             console.log(`${username} 연결됨`);
         });
 
@@ -72,14 +74,21 @@ module.exports = (server) => {
 
         //채팅 입력
         socket.on("chat message", (data) => {
-            const msg = data.msg;
-            const user = data.user;
-            const date = data.createDate;
+            const msg = { 
+                value: data.msg, 
+                date: data.createDate,
+            };
+            const user = { 
+                name: data.user, 
+                role: data.role 
+            };
+
             if (messages.length >= MAX_MESSAGE) {
                 messages.shift();
             }
-            messages.push({ msg, user, createDate: date });
-            io.emit("chat message", { msg: msg, user: user, createDate: date });
+            const item = { msg, user};
+            messages.push(item);
+            io.emit("chat message", item);
         });
 
         socket.on('forceDisconnect', function () {
