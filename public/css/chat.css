@@ -118,6 +118,10 @@
     background-color: #ccffcc;
 }
 
+.msg-admin {
+    background-color: #ffccfb !important;
+}
+
 .msg-out {
     background-color: #ffcccc;
 }
