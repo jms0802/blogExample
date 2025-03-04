@@ -7,6 +7,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%- locals.title %></title>
     <meta name="description" content="My first application using Node.js, Express and MongoDB">
+    <script>
+        // 페이지 로드 전에 테마 설정
+        (function () {
+            const savedTheme = localStorage.getItem("color-theme") || "light";
+            document.documentElement.setAttribute("color-theme", savedTheme);
+        })();
+    </script>
     <link rel="stylesheet" href="/css/style.css">
     <% if(locals.stylesheet) { %>
         <link rel="stylesheet" href="/css/<%= locals.stylesheet %>">
@@ -62,11 +69,6 @@
 
 </body>
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const savedTheme = localStorage.getItem("color-theme") || "light";
-        document.documentElement.setAttribute("color-theme", savedTheme);
-    });
-
     const toggleButton = document.querySelector('.dark-light-toggle');
 
     toggleButton.addEventListener('click', () => {

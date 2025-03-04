@@ -28,7 +28,7 @@
 }
 
 #user-count {
-    background-color: var(--btn-default);
+    background-color: var(--popup-default);
     border: 1px solid #dee2e6;
     color: var(--font-color);
     padding: 5px 12px;
@@ -42,7 +42,7 @@
 }
 
 #user-count:hover {
-    background-color: #e9ecef;
+    background-color: var(--surface-hover);
 }
 
 .online-indicator {
