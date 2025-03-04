@@ -28,9 +28,9 @@
 }
 
 #user-count {
-    background-color: #f1f3f5;
+    background-color: var(--btn-default);
     border: 1px solid #dee2e6;
-    color: #495057;
+    color: var(--font-color);
     padding: 5px 12px;
     border-radius: 20px;
     font-size: 14px;
@@ -68,7 +68,7 @@
     padding: 10px;
     overflow-y: auto;
     flex-grow: 1;
-    background-color: #fff;
+    background-color: var(--popup-default);
     height: 70vh;
     overflow-x: hidden;
 }
@@ -87,11 +87,12 @@
     background-color: #e1f5fe;
     /* 메시지 배경색 */
     word-wrap: break-word;
+    color: var(--black) !important;
 }
 
 .msg-sent {
     align-self: flex-end;
-    color: #333;
+    color: var(--font-color);
     text-align: right;
 }
 
@@ -102,7 +103,7 @@
 
 .msg-receive {
     align-self: flex-start;
-    color: #333;
+    color: var(--font-color);
     text-align: left;
 }
 
@@ -112,24 +113,28 @@
     border-radius: 5px;
     margin: 0 auto;
     font-size: 0.8rem;
+    color: var(--font-color);
 }
 
 .msg-in {
     background-color: #ccffcc;
+    color: var(--black) !important;
 }
 
 .msg-admin {
     background-color: #ffccfb !important;
+    color: var(--black) !important;
 }
 
 .msg-out {
     background-color: #ffcccc;
+    color: var(--black) !important;
 }
 
 form {
     display: flex;
     padding: 10px;
-    background-color: #fff;
+    background-color: var(--popup-default);
 }
 
 input {
@@ -140,7 +145,7 @@ input {
     margin-right: 10px;
 }
 
-button {
+#send-btn {
     padding: 10px 15px;
     border: none;
     border-radius: 5px;
@@ -150,7 +155,7 @@ button {
     cursor: pointer;
 }
 
-button:hover {
+#send-btn:hover {
     background-color: #0056b3;
     /* 버튼 호버 색상 */
 }
@@ -160,7 +165,7 @@ button:hover {
     position: absolute;
     left: -40%;
     width: 150px;
-    background-color: white;
+    background-color: var(--popup-default);
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     z-index: 200;
@@ -183,7 +188,7 @@ button:hover {
 
 .users-popup-header {
     padding: 12px 16px;
-    background-color: #f8f9fa;
+    background-color: var(--popup-default);
     border-bottom: 1px solid #e9ecef;
     font-weight: 600;
     font-size: 14px;
@@ -218,7 +223,7 @@ button:hover {
 }
 
 .user-item:hover {
-    background-color: #f8f9fa;
+    background-color: var(--surface-hover);
 }
 
 .user-status {
@@ -236,7 +241,7 @@ button:hover {
 .user-popup-close {
     text-align: center;
     padding: 8px 0;
-    background-color: #f8f9fa;
+    background-color: var(--popup-default);
     cursor: pointer;
     font-size: 13px;
     color: #868e96;
