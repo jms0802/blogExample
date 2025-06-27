@@ -32,3 +32,56 @@
         }
     });
 </script>
+
+<hr style="margin: 30px 0;">
+
+<h3>관리자 등록</h3>
+<form action="/register" method="POST" id="registerForm">
+    <label for="reg-username"><b>사용자 이름</b></label>
+    <input type="text" name="username" id="reg-username" required>
+
+    <label for="reg-password"><b>비밀번호</b></label>
+    <input type="password" name="password" id="reg-password" required>
+
+    <label for="confirmPassword"><b>비밀번호 확인</b></label>
+    <input type="password" name="confirmPassword" id="confirmPassword" required>
+
+    <input type="submit" value="등록" class="btn">
+    <p id="register-error-message" style="color: red;"></p>
+</form>
+
+<script>
+    document.getElementById("registerForm").addEventListener("submit", async function (event) {
+        event.preventDefault();
+
+        const username = document.getElementById("reg-username").value;
+        const password = document.getElementById("reg-password").value;
+        const confirmPassword = document.getElementById("confirmPassword").value;
+
+        if (password !== confirmPassword) {
+            document.getElementById("register-error-message").innerText = "비밀번호가 일치하지 않습니다.";
+            return;
+        }
+
+        try {
+            const response = await fetch("/register", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username, password })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                document.getElementById("register-error-message").style.color = "green";
+                document.getElementById("register-error-message").innerText = data.message;
+                // 폼 초기화
+                document.getElementById("registerForm").reset();
+            } else {
+                document.getElementById("register-error-message").innerText = data.message;
+            }
+        } catch (error) {
+            document.getElementById("register-error-message").innerText = "등록 중 오류가 발생했습니다.";
+        }
+    });
+</script>

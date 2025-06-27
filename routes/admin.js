@@ -80,12 +80,36 @@ router.get("/register", (req, res) => {
  * POST /register
  */
 router.post("/register", asyncHandler(async (req, res) => {
-    const hashedPassword = await bcrypt.hash(req.body.password, 10);
-    const user = await User.create({
-        username: req.body.username,
-        password: hashedPassword
-    });
-    //res.json(`user created: ${user}`);
+    try {
+        // JSON 형식의 데이터 처리
+        const { username, password } = req.body;
+        
+        // 이미 존재하는 사용자인지 확인
+        const existingUser = await User.findOne({ username });
+        if (existingUser) {
+            return res.json({ 
+                success: false,
+                message: "이미 존재하는 사용자 이름입니다." 
+            });
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const user = await User.create({
+            username,
+            password: hashedPassword
+        });
+        
+        res.json({ 
+            success: true,
+            message: "관리자가 성공적으로 등록되었습니다." 
+        });
+    } catch (error) {
+        console.error("관리자 등록 오류:", error);
+        res.json({ 
+            success: false,
+            message: "등록 중 오류가 발생했습니다." 
+        });
+    }
 }));
 
 /**
