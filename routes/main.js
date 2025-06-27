@@ -31,18 +31,3 @@ router.get("/post/:id", asyncHandler(async (req, res) => {
 }));
 
 module.exports = router;
-
-// Post.insertMany([
-//     {
-//         title : "제목1",
-//         body : "내용 1 - ㅁㄴ아ㅓㅠㅗ나피ㅓㅇㄹ니ㅏ퓨ㅏㅓㄷㄱ퓨ㅏㅓㄷ자",
-//     },
-//     {
-//         title : "제목2",
-//         body : "내용 2 - ㅁㄴ아ㅓㅠㅗ나피ㅓㅇㄹ니ㅏ퓨ㅏㅓㄷㄱ퓨ㅏㅓㄷ자",
-//     },
-//     {
-//         title : "제목3",
-//         body : "내용 3 - ㅁㄴ아ㅓㅠㅗ나피ㅓㅇㄹ니ㅏ퓨ㅏㅓㄷㄱ퓨ㅏㅓㄷ자",
-//     }
-// ]);

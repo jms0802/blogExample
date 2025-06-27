@@ -1,87 +1,65 @@
-<h3>로그인</h3>
-<form action="/admin" method="POST" id="loginForm">
-    <label for="username"><b>사용자 이름</b></label>
-    <input type="text" name="username" id="username">
-
-    <label for="password"><b>비밀번호</b></label>
-    <input type="password" name="password" id="password">
-
-    <input type="submit" value="로그인" class="btn">
-    <p id="error-message" style="color: red;"></p>
-</form>
-
-<script>
-    document.getElementById("loginForm").addEventListener("submit", async function (event) {
-        event.preventDefault();
-
-        const username = document.getElementById("username").value;
-        const password = document.getElementById("password").value;
-
-        const response = await fetch("/admin", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ username, password })
-        });
-
-        const data = await response.json();
-
-        if (data.success) {
-            window.location.href = data.redirect;  // 서버에서 받은 URL로 리다이렉트
-        } else {
-            document.getElementById("error-message").innerText = data.message;
-        }
-    });
-</script>
-
-<hr style="margin: 30px 0;">
-
-<h3>관리자 등록</h3>
-<form action="/register" method="POST" id="registerForm">
-    <label for="reg-username"><b>사용자 이름</b></label>
-    <input type="text" name="username" id="reg-username" required>
-
-    <label for="reg-password"><b>비밀번호</b></label>
-    <input type="password" name="password" id="reg-password" required>
-
-    <label for="confirmPassword"><b>비밀번호 확인</b></label>
-    <input type="password" name="confirmPassword" id="confirmPassword" required>
-
-    <input type="submit" value="등록" class="btn">
-    <p id="register-error-message" style="color: red;"></p>
-</form>
+<div class="admin-login">
+  <div class="login-container">
+    <div class="login-header">
+      <h2 class="login-title">관리자 로그인</h2>
+      <p class="login-subtitle">블로그 관리에 접근하려면 로그인해주세요</p>
+    </div>
+    
+    <form action="/admin" method="POST" id="loginForm" class="login-form">
+      <div class="form-group">
+        <label for="username" class="form-label">사용자 이름</label>
+        <input type="text" name="username" id="username" class="form-input" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="password" class="form-label">비밀번호</label>
+        <input type="password" name="password" id="password" class="form-input" required>
+      </div>
+      
+      <button type="submit" class="btn btn-primary login-btn">
+        로그인
+      </button>
+      
+      <div id="error-message" class="error-message"></div>
+    </form>
+  </div>
+</div>
 
 <script>
-    document.getElementById("registerForm").addEventListener("submit", async function (event) {
-        event.preventDefault();
+  document.getElementById("loginForm").addEventListener("submit", async function (event) {
+    event.preventDefault();
 
-        const username = document.getElementById("reg-username").value;
-        const password = document.getElementById("reg-password").value;
-        const confirmPassword = document.getElementById("confirmPassword").value;
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+    const errorMessage = document.getElementById("error-message");
+    const submitBtn = document.querySelector(".login-btn");
 
-        if (password !== confirmPassword) {
-            document.getElementById("register-error-message").innerText = "비밀번호가 일치하지 않습니다.";
-            return;
-        }
+    // 로딩 상태 표시
+    submitBtn.textContent = "로그인 중...";
+    submitBtn.disabled = true;
+    errorMessage.textContent = "";
 
-        try {
-            const response = await fetch("/register", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ username, password })
-            });
+    try {
+      const response = await fetch("/admin", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password })
+      });
 
-            const data = await response.json();
+      const data = await response.json();
 
-            if (data.success) {
-                document.getElementById("register-error-message").style.color = "green";
-                document.getElementById("register-error-message").innerText = data.message;
-                // 폼 초기화
-                document.getElementById("registerForm").reset();
-            } else {
-                document.getElementById("register-error-message").innerText = data.message;
-            }
-        } catch (error) {
-            document.getElementById("register-error-message").innerText = "등록 중 오류가 발생했습니다.";
-        }
-    });
+      if (data.success) {
+        window.location.href = data.redirect;
+      } else {
+        errorMessage.textContent = data.message;
+        errorMessage.style.display = "block";
+      }
+    } catch (error) {
+      errorMessage.textContent = "로그인 중 오류가 발생했습니다.";
+      errorMessage.style.display = "block";
+    } finally {
+      submitBtn.textContent = "로그인";
+      submitBtn.disabled = false;
+    }
+  });
 </script>

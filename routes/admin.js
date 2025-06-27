@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const adminLayout1 = "../views/layouts/admin";
-const adminLayout2 = "../views/layouts/admin-nologout";
+const adminLayout2 = "../views/layouts/main";
 const asyncHandler = require("express-async-handler");
 const User = require("../models/User");
 const Post = require("../models/Post");
@@ -177,7 +177,6 @@ router.put("/edit/:id", checkLogin, asyncHandler(async (req, res) => {
     await Post.findByIdAndUpdate(req.params.id, {
         title: req.body.title,
         body: req.body.body,
-        createAt: Date.now()
     })
     console.log(req.body);
     res.redirect("/allPosts");

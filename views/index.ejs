@@ -1,22 +1,42 @@
-<!-- 상단 소개글, 히어로 이미지 -->
-<div class="top">
-    <h1 class="top-heading">상상나래</h1>
-    <p class="top-body">상상하는 것을 맘껏 구현하며 개발 공부하고 있습니다.</p>
-</div>
-
-<img src="/img/top-hero.jpg" alt="노트에 기록하는 모습" class="hero-image" width="840" height="400">
-
-<!-- 최근 게시물 -->
-<section class="articles">
-    <h2 class="articles-heading">최근 게시물</h2>
-    <ul class="article-ul">
-        <% data.forEach(post => { %>
-            <li>
-                <a href="/post/<%= post._id %>">
-                    <span><%= post.title %></span>
-                    <span class="article-list-date"><%= post.createAt.toDateString() %></span>
-                </a>
-            </li>
-        <% }) %>
-    </ul>
+<!-- 메인 컨텐츠만 표시 (대제목 없음) -->
+<section class="recent-posts">
+  <div class="hero-image-container">
+    <img src="/img/top-hero.jpg" alt="Hero Image" class="hero-image">
+  </div>
+  <div class="section-header">
+    <h2 class="section-title">최근 게시물</h2>
+  </div>
+  <div class="posts-grid">
+    <% data.slice(0, 3).forEach(post => { %>
+      <a href="/post/<%= post._id %>" class="post-card">
+        <div class="post-card-left">
+          <div class="post-date-large">
+            <%= post.createAt.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' }) %>
+          </div>
+        </div>
+        <div class="post-card-right">
+          <h3 class="post-title">
+            <%= post.title %>
+          </h3>
+          <div class="post-tags">
+            <% if (post.tags && post.tags.length) { %>
+              <% post.tags.forEach(tag => { %>
+                <span class="post-tag"><%= tag %></span>
+              <% }) %>
+            <% } else { %>
+              <span class="post-tag">FEATURE</span>
+            <% } %>
+          </div>
+          <div class="post-preview">
+            <%= post.preview || '이곳에 게시물 요약 또는 미리보기가 들어갑니다.' %>
+          </div>
+        </div>
+      </a>
+    <% }) %>
+  </div>
+  <% if (data.length > 0) { %>
+    <div class="section-footer">
+      <a href="/blog" class="btn btn-outline">모든 게시물 보기</a>
+    </div>
+  <% } %>
 </section>

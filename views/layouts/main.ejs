@@ -8,7 +8,7 @@
   <title>
     <%= locals.title %>
   </title>
-  <meta name="description" content="My first application using Node.js, Express and MongoDB">
+  <meta name="description" content="상상나래 - 상상하는 것을 맘껏 구현하며 개발 공부하고 있습니다">
   <script>
     // 페이지 로드 전에 테마 설정
     (function () {
@@ -20,66 +20,192 @@
     <link rel="stylesheet" href="/css/<%= locals.stylesheet %>">
     <% } %>
       <link rel="stylesheet" href="/css/style.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
 
 <body>
 
   <div class="container">
+    <!-- 모바일 상단 네비게이션 -->
+    <div class="mobile-nav">
+      <button class="mobile-search-toggle" aria-label="검색">
+        <i class="fa fa-search"></i>
+      </button>
+      <button class="mobile-menu-toggle" aria-label="메뉴">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+
+    <!-- 모바일 검색 오버레이 -->
+    <div class="mobile-search-overlay">
+      <form class="mobile-search-form" action="/search" method="get">
+        <input type="text" name="q" placeholder="검색..." aria-label="검색">
+        <button type="submit" aria-label="검색 실행">
+          <i class="fa fa-search"></i>
+        </button>
+        <button type="button" class="mobile-search-close" aria-label="검색 닫기">
+          <i class="fa fa-times"></i>
+        </button>
+      </form>
+    </div>
+    
+
+    <!-- 모바일 메뉴 사이드바 -->
+    <div class="mobile-menu-overlay">
+      <div class="mobile-menu-sidebar">
+        <div class="mobile-menu-header">
+          <!-- 다크모드 -->
+          <button class="dark-light-toggle" aria-label="다크모드 토글" aria-hidden="true">
+            <div class="icon30 sun">
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                fill="currentColor">
+                <path
+                  d="M480-280q-83 0-141.5-58.5T280-480q0-83 58.5-141.5T480-680q83 0 141.5 58.5T680-480q0 83-58.5 141.5T480-280ZM200-440H40v-80h160v80Zm720 0H760v-80h160v80ZM440-760v-160h80v160h-80Zm0 720v-160h80v160h-80ZM256-650l-101-97 57-59 96 100-52 56Zm492 496-97-101 53-55 101 97-57 59Zm-98-550 97-101 59 57-100 96-56-52ZM154-212l101-97 55 53-97 101-59-57Z" />
+              </svg>
+            </div>
+            <div class="icon30 moon">
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                fill="white">
+                <path
+                  d="M480-120q-150 0-255-105T120-480q0-150 105-255t255-105q14 0 27.5 1t26.5 3q-41 29-65.5 75.5T444-660q0 90 63 153t153 63q55 0 101-24.5t75-65.5q2 13 3 26.5t1 27.5q0 150-105 255T480-120Z" />
+              </svg>
+            </div>
+          </button>
+          <h3>메뉴</h3>
+          <button class="mobile-menu-close" aria-label="메뉴 닫기">
+            <i class="fa fa-times"></i>
+          </button>
+        </div>
+        <ul class="mobile-menu-list">
+          <li><a href="/" class="<%= locals.currentPage === 'home' ? 'active' : '' %>">Home</a></li>
+          <li><a href="/about" class="<%= locals.currentPage === 'about' ? 'active' : '' %>" style="pointer-events: none; color: red;">About</a></li>
+          <li><a href="/blog" class="<%= locals.currentPage === 'blog' ? 'active' : '' %>" style="pointer-events: none; color: red;">My Blog</a></li>
+          <li><a href="/contact" class="<%= locals.currentPage === 'contact' ? 'active' : '' %>" style="pointer-events: none; color: red;">Contact</a></li>
+        </ul>
+        <div class="mobile-menu-footer">
+          <div class="mobile-sns">
+            <a href="#" aria-label="instagram"><i class="fab fa-instagram"></i></a>
+          </div>
+          <a href="/admin" class="mobile-admin-link">관리자 로그인</a>
+        </div>
+      </div>
+    </div>
 
     <!-- 헤더 : 로고, 상단 메뉴, 로그인 -->
     <header class="header">
-      <div class="logo-container">
-        <!-- 로고 -->
-        <a href="/" class="header-logo">상상나래</a>
-        <!-- 다크모드 -->
-        <button class="dark-light-toggle" aria-hidden="true">
-          <div class="icon30 sun">
-            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#222222">
-              <path
-                d="M480-280q-83 0-141.5-58.5T280-480q0-83 58.5-141.5T480-680q83 0 141.5 58.5T680-480q0 83-58.5 141.5T480-280ZM200-440H40v-80h160v80Zm720 0H760v-80h160v80ZM440-760v-160h80v160h-80Zm0 720v-160h80v160h-80ZM256-650l-101-97 57-59 96 100-52 56Zm492 496-97-101 53-55 101 97-57 59Zm-98-550 97-101 59 57-100 96-56-52ZM154-212l101-97 55 53-97 101-59-57Z" />
-            </svg>
-          </div>
-          <div class="icon30 moon">
-            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF">
-              <path
-                d="M480-120q-150 0-255-105T120-480q0-150 105-255t255-105q14 0 27.5 1t26.5 3q-41 29-65.5 75.5T444-660q0 90 63 153t153 63q55 0 101-24.5t75-65.5q2 13 3 26.5t1 27.5q0 150-105 255T480-120Z" />
-            </svg>
-          </div>
-        </button>
-      </div>
-      <!-- 상단 메뉴 -->
-      <nav class="header-nav">
-        <ul>
-          <li>
-            <a href="/home">Home</a>
-          </li>
-          <!-- <li>
-            <a href="/chat">Chat</a>
-          </li> -->
+      <div class="site-slogan">Imaginations crafted into real code.</div>
+      <div class="site-title"><a href="/">Imaginary.dev</a></div>
+      <nav class="main-navbar desktop-nav">
+        <ul class="navbar-menu">
+          <li><a href="/" class="<%= locals.currentPage === 'home' ? 'active' : '' %>">Home</a></li>
+          <li><a href="/blog" class="<%= locals.currentPage === 'blog' ? 'active' : '' %>" style="pointer-events: none; color: red;">Blog</a></li>
+          <li><a href="/contact" class="<%= locals.currentPage === 'contact' ? 'active' : '' %>" style="pointer-events: none; color: red;">Contact</a></li>
         </ul>
+        <div class="navbar-right">
+          <form class="navbar-search" action="/search" method="get">
+            <input type="text" name="q" placeholder="" aria-label="검색">
+            <button type="submit" style="pointer-events: none; color: red;"><i class="fa fa-search"></i></button>
+          </form>
+          <!-- <div class="navbar-sns">
+          <a href="#" aria-label="instagram"><i class="fab fa-instagram"></i></a>
+        </div> -->
+          <!-- 다크모드 -->
+          <button class="dark-light-toggle" aria-label="다크모드 토글" aria-hidden="true">
+            <div class="icon30 sun">
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                fill="currentColor">
+                <path
+                  d="M480-280q-83 0-141.5-58.5T280-480q0-83 58.5-141.5T480-680q83 0 141.5 58.5T680-480q0 83-58.5 141.5T480-280ZM200-440H40v-80h160v80Zm720 0H760v-80h160v80ZM440-760v-160h80v160h-80Zm0 720v-160h80v160h-80ZM256-650l-101-97 57-59 96 100-52 56Zm492 496-97-101 53-55 101 97-57 59Zm-98-550 97-101 59 57-100 96-56-52ZM154-212l101-97 55 53-97 101-59-57Z" />
+              </svg>
+            </div>
+            <div class="icon30 moon">
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                fill="white">
+                <path
+                  d="M480-120q-150 0-255-105T120-480q0-150 105-255t255-105q14 0 27.5 1t26.5 3q-41 29-65.5 75.5T444-660q0 90 63 153t153 63q55 0 101-24.5t75-65.5q2 13 3 26.5t1 27.5q0 150-105 255T480-120Z" />
+              </svg>
+            </div>
+          </button>
+          <!-- 관리자 로그인 -->
+          <div class="header-button">
+            <a href="/admin">로그인</a>
+          </div>
+        </div>
       </nav>
-
-      <!-- 관리자 로그인 -->
-      <div class="header-button">
-        <a href="/admin">관리자 로그인</a>
-      </div>
     </header>
 
     <!-- 메인 : 실제 내용이 들어갈 부분 -->
     <main class="main">
       <%- body %>
     </main>
+
+    <!-- 푸터 -->
+    <footer class="footer">
+      <p>&copy; 2024 상상나래. 모든 권리 보유.</p>
+    </footer>
   </div>
 
 </body>
 <script>
-  const toggleButton = document.querySelector('.dark-light-toggle');
+  // 다크모드 토글 - 모든 다크모드 버튼에 이벤트 연결
+  const toggleButtons = document.querySelectorAll('.dark-light-toggle');
+  
+  toggleButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute("color-theme");
+      const newTheme = currentTheme === "light" ? "dark" : "light";
+      document.documentElement.setAttribute("color-theme", newTheme);
+      localStorage.setItem("color-theme", newTheme);
+    });
+  });
 
-  toggleButton.addEventListener('click', () => {
-    const currentTheme = document.documentElement.getAttribute("color-theme");
-    const newTheme = currentTheme === "light" ? "dark" : "light";
-    document.documentElement.setAttribute("color-theme", newTheme);
-    localStorage.setItem("color-theme", newTheme);
+  // 모바일 검색 토글
+  const mobileSearchToggle = document.querySelector('.mobile-search-toggle');
+  const mobileSearchOverlay = document.querySelector('.mobile-search-overlay');
+  const mobileSearchClose = document.querySelector('.mobile-search-close');
+  
+  if (mobileSearchToggle && mobileSearchOverlay) {
+    mobileSearchToggle.addEventListener('click', () => {
+      mobileSearchOverlay.classList.add('active');
+      mobileSearchOverlay.querySelector('input').focus();
+    });
+    
+    mobileSearchClose.addEventListener('click', () => {
+      mobileSearchOverlay.classList.remove('active');
+    });
+  }
+
+  // 모바일 메뉴 토글
+  const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+  const mobileMenuOverlay = document.querySelector('.mobile-menu-overlay');
+  const mobileMenuClose = document.querySelector('.mobile-menu-close');
+  
+  if (mobileMenuToggle && mobileMenuOverlay) {
+    mobileMenuToggle.addEventListener('click', () => {
+      mobileMenuOverlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    });
+    
+    mobileMenuClose.addEventListener('click', () => {
+      mobileMenuOverlay.classList.remove('active');
+      document.body.style.overflow = '';
+    });
+  }
+
+  // 오버레이 외부 클릭 시 닫기
+  document.addEventListener('click', (e) => {
+    if (mobileSearchOverlay && mobileSearchOverlay.classList.contains('active') && 
+        !mobileSearchOverlay.contains(e.target) && !mobileSearchToggle.contains(e.target)) {
+      mobileSearchOverlay.classList.remove('active');
+    }
+    
+    if (mobileMenuOverlay && mobileMenuOverlay.classList.contains('active') && 
+        !mobileMenuOverlay.contains(e.target) && !mobileMenuToggle.contains(e.target)) {
+      mobileMenuOverlay.classList.remove('active');
+      document.body.style.overflow = '';
+    }
   });
 </script>
 
