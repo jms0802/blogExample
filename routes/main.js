@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const mainLayout = "../views/layouts/main.ejs"
 const Post = require("../models/Post");
+const marked = require('marked');
 const asyncHandler = require("express-async-handler");
 
 router.get(["/", "/home"], asyncHandler(async (req, res) => {
@@ -27,7 +28,13 @@ router.get("/chat", (req, res) => {
  */
 router.get("/post/:id", asyncHandler(async (req, res) => {
     const data = await Post.findOne({ _id: req.params.id });
-    res.render("post", { data, layout: mainLayout });
+    const content = marked.parse(data.body);
+    const locals = {
+        title: data.title,
+        stylesheet:"markdown.css",
+        role: "user",
+    }
+    res.render("post", { locals, data, content: content, layout: mainLayout });
 }));
 
 module.exports = router;

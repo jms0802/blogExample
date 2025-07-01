@@ -35,7 +35,7 @@
 }
 
 :root[color-theme='dark'] {
-  --surface-default: #111827;
+  --surface-default: #23232b;
   --surface-hover: #1f2937;
   --surface-secondary: #374151;
   --popup-default: #1f2937;
@@ -961,7 +961,7 @@ img {
 
 /* 게시물 상세 페이지 */
 .post-detail {
-  max-width: 800px;
+  max-width: 1000px;
   margin: 0 auto;
   padding: 2rem 0;
 }
@@ -1237,7 +1237,6 @@ img {
   }
 
   .admin-title {
-    flex-direction: column;
     gap: 1rem;
     text-align: center;
   }

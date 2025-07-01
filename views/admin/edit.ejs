@@ -3,17 +3,52 @@
     <h2>
         <%= locals.title %>
     </h2>
+    <% if (locals.role === "edit") { %>
     <form action="/delete/<%= data._id %>?_method=DELETE" method="POST">
         <input type="submit" value="삭제" class="btn-delete btn">
     </form>
+    <% } %>
 </div>
 
-<form action="/edit/<%= data._id %>?_method=PUT" method="POST">
+<form action="<%= locals.role === 'edit' ? '/edit/' + data._id + '?_method=PUT' : '/add' %>" method="POST">
     <label for="title"><b>제목</b></label>
-    <input type="text" name="title" id="title" value="<%= data.title %>">
+    <input type="text" name="title" id="title" value="<%= locals.role === 'edit' ? data.title : '' %>">
 
-    <label for="body"><b>내용</b></label>
-    <textarea name="body" id="body" cols="50" rows="10"><%= data.body %></textarea>
+    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+      <label for="body" style="margin:0;"><b>내용</b></label>
+      <button type="button" id="preview-btn" class="btn" style="padding:0.3em 1em; font-size:0.95em;">미리보기</button>
+    </div>
+    <textarea name="body" id="body" cols="50" rows="10" style="width:100%; height:600px; box-sizing:border-box; resize:vertical;"><% if (locals.role === "edit") { %><%= data.body %><% } %></textarea>
+    <div id="md-preview" class="markdown-body" style="display:none; border:1px solid #ddd; margin-bottom:1rem; padding:1rem;"></div>
 
-    <input type="submit" value="수정" class="btn">
+    <input type="submit" value="<%= locals.role === 'edit' ? '수정' : '등록' %>" class="btn">
 </form>
+
+<!-- marked.js CDN 추가 -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
+  const previewBtn = document.getElementById('preview-btn');
+  const textarea = document.getElementById('body');
+  const previewDiv = document.getElementById('md-preview');
+
+  let isPreview = false;
+
+  previewBtn.addEventListener('click', function() {
+    if (!isPreview) {
+      // 미리보기 모드로 전환
+      const mdText = textarea.value;
+      const html = marked.parse(mdText);
+      previewDiv.innerHTML = html;
+      textarea.style.display = 'none';
+      previewDiv.style.display = 'block';
+      previewBtn.textContent = '미리보기 닫기';
+      isPreview = true;
+    } else {
+      // 작성 모드로 전환
+      textarea.style.display = 'block';
+      previewDiv.style.display = 'none';
+      previewBtn.textContent = '미리보기';
+      isPreview = false;
+    }
+  });
+</script>
