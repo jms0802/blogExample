@@ -1,13 +1,11 @@
-<!-- 메인 컨텐츠만 표시 (대제목 없음) -->
-<section class="recent-posts">
-  <div class="hero-image-container">
-    <img src="/img/top-hero.jpg" alt="Hero Image" class="hero-image">
-  </div>
-  <div class="section-header">
-    <h2 class="section-title">최근 게시물</h2>
-  </div>
-  <div class="posts-grid">
-    <% data.slice(0, 3).forEach(post => { %>
+<div class="section-header">
+    <h1>모든 게시물</h1>
+</div>
+<div class="posts-grid">
+  <% if (posts.length === 0) { %>
+    <p>게시물이 없습니다.</p>
+  <% } else { %>
+    <% posts.forEach(function(post) { %>
       <a href="/post/<%= post._id %>" class="post-card">
         <div class="post-card-left">
           <div class="post-date-large">
@@ -29,11 +27,6 @@
           </div>
         </div>
       </a>
-    <% }) %>
-  </div>
-  <% if (data.length > 0) { %>
-    <div class="section-footer">
-      <a href="/blog" class="btn btn-outline">모든 게시물 보기</a>
-    </div>
+    <% }); %>
   <% } %>
-</section>
+</div>

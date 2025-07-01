@@ -1,18 +1,18 @@
-<article class="post-detail">
-  <header class="post-header">
-    <h1 class="post-title"><%= data.title %></h1>
-    <div class="post-meta">
-      <time class="post-date" datetime="<%= data.createAt.toISOString() %>">
+<article class="markdown-detail">
+  <header class="markdown-header">
+    <h1 class="markdown-title"><%= data.title %></h1>
+    <div class="markdown-meta">
+      <time class="markdown-date" datetime="<%= data.createAt.toISOString() %>">
         <%= data.createAt.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' }) %>
       </time>
     </div>
   </header>
   
-  <div class="post-content markdown-body">
+  <div class="markdown-body">
     <%- content %>
   </div>
   
-  <footer class="post-footer">
+  <footer class="markdown-footer">
     <a href="/" class="btn btn-outline">← 홈으로 돌아가기</a>
   </footer>
 </article>
