@@ -1,15 +1,18 @@
-require("dotenv").config();
 const express = require("express");
+
+const path = require("path");
+const envFile =
+    process.env.NODE_ENV === "production" ? ".env.production" : ".env.dev";
+require("dotenv").config({ path: path.resolve(__dirname, envFile) });
+
 const expressLayouts = require("express-ejs-layouts");
-const connectDb = require("./config/db");
+const sqlite = require("./config/db");
 const cookieParser = require("cookie-parser");
 const methodOverride = require("method-override");
-const webSocket  = require("./middleware/chatSocket");
+const webSocket = require("./middleware/chatSocket");
 
 const app = express();
 const port = process.env.PORT || 3000;
-
-connectDb();
 
 app.use(expressLayouts);
 app.set("view engine", "ejs");

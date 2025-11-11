@@ -1,19 +1,28 @@
-const mongoose = require("mongoose");
-const asyncHandler = require("express-async-handler");
-const fs = require('fs');
-const path = require('path');
+const sqlite3 = require("sqlite3").verbose();
 
-const envFile = process.env.NODE_ENV === 'product' ? '.env.product' : '.env.dev';
-require('dotenv').config({ path: path.resolve(__dirname, '..', envFile) });
-
-const connectDb = asyncHandler( async() => {
-    try {
-        const connect = await mongoose.connect(process.env.MONGODB_URI);
-        console.log(`DB Connected : ${connect.connection.host}`);
-    } catch(error) {
-        console.error('MongoDB 연결 실패:', error);
-        process.exit(1);
-    }
+const db = new sqlite3.Database("./database.db", (err) => {
+    if (err) console.error("❌ DB 연결 실패:", err.message);
+    else console.log("✅ SQLite 연결 성공");
 });
 
-module.exports = connectDb;
+// 테이블 초기화 (한 번만 실행)
+db.serialize(() => {
+    db.run(`
+    CREATE TABLE IF NOT EXISTS users (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      username Text,
+      password TEXT
+    )
+  `);
+
+    db.run(`
+    CREATE TABLE IF NOT EXISTS posts (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      title TEXT NOT NULL,
+      body TEXT NOT NULL,
+      createAt DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+});
+
+module.exports = db;
