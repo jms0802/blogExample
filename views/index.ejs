@@ -7,11 +7,11 @@
     <h2 class="section-title">최근 게시물</h2>
   </div>
   <div class="posts-grid">
-    <% data.slice(0, 3).forEach(post => { %>
-      <a href="/post/<%= post._id %>" class="post-card">
+    <% data.slice(0, 3).forEach(post=> { %>
+      <a href="/post/<%= post.id %>" class="post-card">
         <div class="post-card-left">
           <div class="post-date-large">
-            <%= post.createAt.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' }) %>
+            <%= post.createAt.toLocaleDateString('ko-KR', { year: 'numeric' , month: 'long' , day: 'numeric' }) %>
           </div>
         </div>
         <div class="post-card-right">
@@ -19,21 +19,31 @@
             <%= post.title %>
           </h3>
           <div class="post-tags">
-            <% if (post.tags && post.tags.length) { %>
-              <% post.tags.forEach(tag => { %>
-                <span class="post-tag"><%= tag %></span>
-              <% }) %>
-            <% } else { %>
-              <span class="post-tag">FEATURE</span>
-            <% } %>
+            <% let tags=[]; if (typeof post.tags==="string" && post.tags.trim().length> 0) {
+              try {
+              tags = JSON.parse(post.tags);
+              } catch(e) {
+              tags = post.tags.split(',').map(tag => tag.trim());
+              }
+              }
+              %>
+              <% if (tags.length) { %>
+                <% tags.forEach(tag=> { %>
+                  <span class="post-tag">
+                    <%= tag %>
+                  </span>
+                  <% }) %>
+                    <% } else { %>
+                      <span class="post-tag">FEATURE</span>
+                      <% } %>
           </div>
         </div>
       </a>
-    <% }) %>
+      <% }) %>
   </div>
-  <% if (data.length > 0) { %>
+  <% if (data.length> 0) { %>
     <div class="section-footer">
       <a href="/blog" class="btn btn-outline">모든 게시물 보기</a>
     </div>
-  <% } %>
+    <% } %>
 </section>

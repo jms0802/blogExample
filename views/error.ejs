@@ -1,0 +1,67 @@
+<div class="error-page">
+    <div class="error-graphic">
+        <i class="fa fa-exclamation-triangle" style="font-size: 4rem; color: #e2584d;"></i>
+    </div>
+    <h1 class="error-status">
+        <%= error.status || error.statusCode %>
+    </h1>
+    <h2 class="error-title">
+        <%= locals.title %>
+    </h2>
+    <p class="error-message">
+        <%= error.message %>
+    </p>
+    <a href="/" class="btn btn-primary" style="margin-top: 2rem;">홈으로 돌아가기</a>
+</div>
+<style>
+    .error-page {
+        max-width: 400px;
+        margin: 5rem auto 8rem auto;
+        text-align: center;
+        padding: 2.5rem 2rem 2.5rem 2rem;
+        background: var(--color-bg-2, #fff);
+        border-radius: 1rem;
+        box-shadow: 0 2px 24px 5px rgba(0, 0, 0, 0.07);
+    }
+
+    .error-graphic {
+        margin-bottom: 0.8rem;
+    }
+
+    .error-status {
+        font-size: 4rem;
+        font-weight: bold;
+        color: #e2584d;
+        margin-bottom: 0.1em;
+    }
+
+    .error-title {
+        font-size: 1.4rem;
+        color: #383838;
+        margin-bottom: 0.7em;
+        margin-top: 0;
+        font-weight: 500;
+    }
+
+    .error-message {
+        color: #666;
+        font-size: 1.05rem;
+        margin-bottom: 1.8em;
+    }
+
+    .btn.btn-primary {
+        display: inline-block;
+        background: #e2584d;
+        color: #fff !important;
+        padding: 0.65em 1.5em;
+        border-radius: 2em;
+        text-decoration: none;
+        font-weight: bold;
+        transition: background 0.14s;
+        box-shadow: 0 2px 12px rgba(226, 88, 77, 0.12);
+    }
+
+    .btn.btn-primary:hover {
+        background: #b93d34;
+    }
+</style>
